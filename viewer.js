@@ -11,7 +11,8 @@ async function unlock(value) {
   busy = true;
   const button = form.querySelector('button');
   button.disabled = true;
-  status.textContent = 'Opening manuscript…';
+  form.hidden = true;
+  status.textContent = 'Opening manuscript automatically. Downloading the 16 MB PDF; no access-key entry is needed.';
   try {
     if (!window.isSecureContext || !crypto.subtle) {
       throw new Error('unsupported-context');
@@ -53,8 +54,18 @@ form.addEventListener('submit', event => {
   void unlock(input.value);
 });
 
-const initialKey = new URLSearchParams(location.hash.slice(1)).get('key');
-if (initialKey) {
-  history.replaceState(null, '', location.pathname + location.search);
-  void unlock(initialKey);
+function readSharingLink() {
+  const linkKey = new URLSearchParams(location.hash.slice(1)).get('key');
+  if (linkKey) {
+    void unlock(linkKey);
+  } else if (!currentObjectUrl && !busy) {
+    form.hidden = false;
+    status.textContent = 'Please open the complete private sharing link, including the #key= part, or enter the access key below.';
+  }
 }
+
+// Retain the fragment so refreshes and copied links keep working. URL fragments
+// are not included in HTTP requests. Also handle opening a complete link in a
+// tab that already has the locked page open (same-document hash navigation).
+window.addEventListener('hashchange', readSharingLink);
+readSharingLink();

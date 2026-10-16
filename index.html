@@ -8,13 +8,13 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-src blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>Research manuscript</title>
   <link rel="stylesheet" href="style.css">
-  <script src="viewer.js" defer></script>
+  <script src="viewer.js?v=2" defer></script>
 </head>
 <body>
   <main>
     <h1>Research manuscript</h1>
     <p id="status" role="status" aria-live="polite">Use the complete private link to open this manuscript.</p>
-    <form id="unlock-form">
+    <form id="unlock-form" hidden>
       <label for="access-key">Access key</label>
       <input id="access-key" type="password" autocomplete="off" spellcheck="false" required>
       <button type="submit">Open manuscript</button>
